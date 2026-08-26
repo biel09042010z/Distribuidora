@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — CapilPro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:      #C2790A;
+      --gold-lt:   #E89A2E;
+      --gold-dk:   #94590A;
+      --ink:       #15161A;
+      --surface:   #F4F4F2;
+      --card:      #FFFFFF;
+      --border:    #E3E3E0;
+      --muted:     #6B6B68;
+      --accent:    #E1251B;
+      --green:     #1FA34D;
+      --r:         10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: var(--ink); min-height: 100dvh; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── LOGIN ──────────────────────────────────────── */
+    #loginScreen {
+      min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px;
+      background: var(--surface);
+    }
+    .login-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px 32px;
+      width: 100%; max-width: 380px; text-align: center;
+      box-shadow: 0 20px 50px rgba(20,20,20,0.06);
+    }
+    .login-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--gold);
+      display: grid; place-items: center; margin: 0 auto 20px; font-size: 1.5rem;
+    }
+    .login-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 900;
+      margin-bottom: 6px; letter-spacing: -0.01em;
+    }
+    .login-title span { color: var(--gold); }
+    .login-sub { font-size: .85rem; color: var(--muted); margin-bottom: 28px; }
+    .login-input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink); border-radius: var(--r);
+      padding: 13px 16px; font-size: .95rem; outline: none;
+      margin-bottom: 10px; transition: border-color .2s; font-family: inherit;
+    }
+    .login-input:focus { border-color: var(--gold); }
+    .login-input::placeholder { color: #A6A5A0; }
+    .login-error { color: var(--accent); font-size: .8rem; margin-bottom: 12px; min-height: 18px; font-weight: 600; }
+    .btn-login {
+      width: 100%; background: var(--ink); color: #fff;
+      border: none; border-radius: var(--r);
+      padding: 14px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background .2s; font-family: inherit;
+    }
+    .btn-login:hover { background: var(--gold); }
+
+    /* ── ADMIN SHELL ────────────────────────────────── */
+    #adminScreen { display: none; flex-direction: column; min-height: 100dvh; }
+
+    /* ── TOPBAR ─────────────────────────────────────── */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff; border-bottom: 1px solid var(--border);
+      height: 60px; padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-logo {
+      font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 900;
+      display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em;
+    }
+    .topbar-logo span { color: var(--gold); }
+    .topbar-badge {
+      background: var(--ink); color: #fff; font-size: .62rem; font-weight: 800;
+      letter-spacing: .06em; border-radius: 50px; padding: 3px 10px; margin-left: 2px;
+    }
+    .topbar-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-back, .btn-logout {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink); border-radius: var(--r);
+      padding: 0 14px; height: 36px; font-size: .8rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: background .2s; text-decoration: none; white-space: nowrap; font-family: inherit;
+    }
+    .btn-back:hover { background: var(--border); }
+    .btn-logout { color: var(--accent); border-color: rgba(225,37,27,.3); }
+    .btn-logout:hover { background: rgba(225,37,27,.08); }
+
+    /* ── TABS ───────────────────────────────────────── */
+    .tabs-bar {
+      display: flex; gap: 4px; overflow-x: auto;
+      padding: 16px 20px 0; border-bottom: 1px solid var(--border);
+      scrollbar-width: none;
+    }
+    .tabs-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: none; border: none; border-bottom: 2px solid transparent;
+      color: var(--muted); padding: 10px 18px; font-size: .85rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: color .2s, border-color .2s; font-family: inherit;
+    }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-btn:hover:not(.active) { color: var(--ink); }
+
+    /* ── CONTENT ────────────────────────────────────── */
+    .content { flex: 1; padding: 28px 20px 100px; max-width: 900px; margin: 0 auto; width: 100%; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── SECTION TITLE ──────────────────────────────── */
+    .section-title {
+      font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 800;
+      margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .section-title span { color: var(--gold); }
+
+    /* ── FORM CARD ──────────────────────────────────── */
+    .form-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .form-card .full { grid-column: 1 / -1; }
+    .form-label { display: block; font-size: .72rem; font-weight: 700; color: var(--muted); margin-bottom: 5px; letter-spacing: .04em; text-transform: uppercase; }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink); border-radius: 8px;
+      padding: 10px 12px; font-size: .88rem; outline: none;
+      transition: border-color .2s; font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-input::placeholder, .form-textarea::placeholder { color: #A6A5A0; }
+    .form-textarea { resize: vertical; min-height: 64px; }
+    .form-actions { grid-column: 1 / -1; display: flex; gap: 8px; }
+    .form-check { display: flex; align-items: center; gap: 10px; padding-top: 18px; }
+    .form-check label { margin: 0; cursor: pointer; font-size: .85rem; color: var(--muted); }
+    .form-check input { width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
+
+    /* ── BUTTONS ────────────────────────────────────── */
+    .btn-primary {
+      background: var(--ink); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 20px;
+      font-size: .88rem; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background .2s; font-family: inherit;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-ghost {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 8px; padding: 10px 16px;
+      font-size: .88rem; font-weight: 600; cursor: pointer;
+      transition: background .2s; font-family: inherit;
+    }
+    .btn-ghost:hover { background: var(--border); color: var(--ink); }
+    .btn-icon {
+      background: none; border: none; cursor: pointer;
+      font-size: .8rem; font-weight: 700;
+      transition: color .2s; padding: 4px 8px; border-radius: 6px; font-family: inherit;
+    }
+    .btn-edit { color: var(--gold); }
+    .btn-delete { color: var(--accent); }
+    .btn-edit:hover { background: rgba(194,121,10,.1); }
+    .btn-delete:hover { background: rgba(225,37,27,.1); }
+
+    /* ── TABLE ──────────────────────────────────────── */
+    .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th { text-align: left; padding: 12px 16px; font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface); }
+    td { padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: middle; }
+    .thumb { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
+    .thumb-emoji { width: 42px; height: 42px; border-radius: 8px; background: var(--surface); display: grid; place-items: center; font-size: 1.2rem; }
+    .td-actions { display: flex; gap: 4px; }
+
+    /* ── PEDIDOS ────────────────────────────────────── */
+    .pedidos-list { display: flex; flex-direction: column; gap: 12px; }
+    .pedido-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .pedido-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+    .pedido-num { font-weight: 700; font-size: .92rem; }
+    .pedido-meta { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    .pedido-itens { font-size: .8rem; color: var(--muted); margin: 8px 0; line-height: 1.6; }
+    .pedido-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .pedido-total { font-weight: 800; color: var(--gold); font-size: .95rem; }
+    .status-select {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--ink); border-radius: 50px; padding: 5px 12px;
+      font-size: .78rem; font-weight: 700; outline: none; cursor: pointer; font-family: inherit;
+    }
+    .status-select:focus { border-color: var(--gold); }
+
+    /* ── TOAST ──────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--ink); color: #fff;
+      border-radius: 50px; padding: 10px 20px;
+      font-size: .85rem; font-weight: 600;
+      z-index: 200; white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      transition: transform .3s; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── EMPTY STATE ────────────────────────────────── */
+    .empty { text-align: center; padding: 48px 20px; color: var(--muted); font-size: .9rem; }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 500px) {
+      .form-card { grid-template-columns: 1fr; }
+      .form-card .full { grid-column: 1; }
+      .form-actions { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔒</div>
+    <div class="login-title">Capil<span>Pro</span> Admin</div>
+    <p class="login-sub">Acesse com seu e-mail e senha.</p>
+    <input class="login-input" type="email" id="emailInput" placeholder="E-mail" autocomplete="username"
+      onkeydown="if(event.key==='Enter') document.getElementById('pwdInput').focus()" />
+    <input class="login-input" type="password" id="pwdInput" placeholder="Senha" autocomplete="current-password"
+      onkeydown="if(event.key==='Enter') tryLogin()" />
+    <div class="login-error" id="loginError"></div>
+    <button class="btn-login" id="loginBtn" onclick="tryLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- ══ ADMIN ═════════════════════════════════════════ -->
+<div id="adminScreen">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      Capil<span>Pro</span>
+      <span class="topbar-badge">ADMIN</span>
+    </div>
+    <div class="topbar-actions">
+      <a href="/index.html" class="btn-back">← Ver site</a>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tabs-bar" aria-label="Seções do painel">
+    <button class="tab-btn active" onclick="switchTab('produtos', this)">💈 Produtos</button>
+    <button class="tab-btn" onclick="switchTab('kits', this)">📦 Kits Atacado</button>
+    <button class="tab-btn" onclick="switchTab('pedidos', this)">🛒 Pedidos</button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ─── PRODUTOS ──────────────────────────────── -->
+    <section class="tab-panel active" id="tab-produtos">
+      <h2 class="section-title">💈 Produtos & <span>Preços</span></h2>
+
+      <div class="form-card" id="produtoForm">
+        <div>
+          <label class="form-label">Nome *</label>
+          <input class="form-input" id="pNome" placeholder="Ex: Pomada Matte 150g" />
+        </div>
+        <div>
+          <label class="form-label">Categoria *</label>
+          <select class="form-select" id="pCategoria">
+            <option value="">Selecione...</option>
+            <option value="pomada">Pomada</option>
+            <option value="gel">Gel</option>
+            <option value="shaving">Shaving</option>
+            <option value="barba">Tratamento p/ Barba</option>
+            <option value="shampoo">Shampoo</option>
+            <option value="alisante">Alisante</option>
+            <option value="descolorante">Descolorante</option>
+            <option value="acessorios">Acessórios</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Preço (R$) *</label>
+          <input class="form-input" id="pPreco" type="number" step="0.01" placeholder="24,99" />
+        </div>
+        <div>
+          <label class="form-label">Preço antigo (R$)</label>
+          <input class="form-input" id="pPrecoAntigo" type="number" step="0.01" placeholder="40,00" />
+        </div>
+        <div>
+          <label class="form-label">Desconto (selo)</label>
+          <input class="form-input" id="pDesconto" placeholder="-38%" />
+        </div>
+        <div>
+          <label class="form-label">Parcelamento</label>
+          <input class="form-input" id="pParcelas" placeholder="5x R$5,71" />
+        </div>
+        <div>
+          <label class="form-label">Emoji (enquanto não há foto)</label>
+          <input class="form-input" id="pEmoji" placeholder="💈" />
+        </div>
+        <div>
+          <label class="form-label">URL da foto (opcional)</label>
+          <input class="form-input" id="pImagemUrl" placeholder="https://..." />
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="pDestaque" />
+          <label for="pDestaque">Destacar (selo "Top")</label>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveProduto()">💾 Salvar produto</button>
+          <button class="btn-ghost" onclick="clearProdutoForm()">Limpar</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Foto</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Top</th><th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="produtosTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── KITS ──────────────────────────────────── -->
+    <section class="tab-panel" id="tab-kits">
+      <h2 class="section-title">📦 Kits <span>Atacado</span></h2>
+
+      <div class="form-card" id="kitForm">
+        <div class="full">
+          <label class="form-label">Nome *</label>
+          <input class="form-input" id="kNome" placeholder="Ex: Kit Bancada Barbeiro" />
+        </div>
+        <div>
+          <label class="form-label">Preço (R$) *</label>
+          <input class="form-input" id="kPreco" type="number" step="0.01" placeholder="189,99" />
+        </div>
+        <div>
+          <label class="form-label">Preço antigo (R$)</label>
+          <input class="form-input" id="kPrecoAntigo" type="number" step="0.01" placeholder="245,70" />
+        </div>
+        <div>
+          <label class="form-label">Desconto (selo)</label>
+          <input class="form-input" id="kDesconto" placeholder="-23%" />
+        </div>
+        <div>
+          <label class="form-label">Tag</label>
+          <input class="form-input" id="kTag" placeholder="Mais Vendido" />
+        </div>
+        <div class="full">
+          <label class="form-label">Descrição</label>
+          <textarea class="form-textarea" id="kDescricao" placeholder="Descreva o kit..."></textarea>
+        </div>
+        <div class="full">
+          <label class="form-label">Itens do kit (um por linha)</label>
+          <textarea class="form-textarea" id="kItens" placeholder="3 Pomadas Modeladoras 150g&#10;2L Shaving Cream Profissional"></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="saveKit()">💾 Salvar kit</button>
+          <button class="btn-ghost" onclick="clearKitForm()">Limpar</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Nome</th><th>Tag</th><th>Preço</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="kitsTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── PEDIDOS ───────────────────────────────── -->
+    <section class="tab-panel" id="tab-pedidos">
+      <h2 class="section-title">🛒 <span>Pedidos</span></h2>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:20px;line-height:1.6">
+        Todo pedido finalizado pelo site (botão "Finalizar pelo WhatsApp") aparece aqui automaticamente.
+      </p>
+      <div id="pedidosList"></div>
+    </section>
+
+  </main>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══ API — chama as funções serverless em /api ═══════ */
+async function api(path, options = {}) {
+  const token = sessionStorage.getItem('cp_token');
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`/api/${path}`, { ...options, headers });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Erro na requisição.');
+  return data;
+}
+
+/* ══ STATE ═════════════════════════════════════════ */
+let produtos = [];
+let kits = [];
+let editingProdutoId = null;
+let editingKitId = null;
+
+/* ══ LOGIN ═════════════════════════════════════════ */
+async function tryLogin() {
+  const email = document.getElementById('emailInput').value.trim();
+  const pwd   = document.getElementById('pwdInput').value;
+  const errEl = document.getElementById('loginError');
+  const btn   = document.getElementById('loginBtn');
+
+  if (!email || !pwd) { errEl.textContent = 'Preencha e-mail e senha.'; return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Entrando...';
+  errEl.textContent = '';
+
+  try {
+    const data = await api('auth', { method: 'POST', body: JSON.stringify({ email, password: pwd }) });
+    sessionStorage.setItem('cp_token', data.token);
+    sessionStorage.setItem('cp_email', data.email);
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminScreen').style.display = 'flex';
+    init();
+  } catch (e) {
+    errEl.textContent = e.message;
+    document.getElementById('pwdInput').value = '';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Entrar';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('cp_token');
+  sessionStorage.removeItem('cp_email');
+  document.getElementById('adminScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('pwdInput').value = '';
+  document.getElementById('emailInput').value = '';
+  document.getElementById('loginError').textContent = '';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('cp_token')) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminScreen').style.display = 'flex';
+    init();
+  }
+});
+
+/* ══ TABS ══════════════════════════════════════════ */
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'pedidos') renderPedidos();
+}
+
+/* ══ INIT ══════════════════════════════════════════ */
+async function init() {
+  try {
+    await Promise.all([loadProdutos(), loadKits()]);
+  } catch (e) {
+    showToast('⚠️ Erro ao carregar dados: ' + e.message);
+  }
+}
+
+/* ══ PRODUTOS ══════════════════════════════════════ */
+async function loadProdutos() {
+  produtos = await api('produtos');
+  renderProdutosTable();
+}
+
+function renderProdutosTable() {
+  const tbody = document.getElementById('produtosTable');
+  if (!produtos.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">💈</div>Nenhum produto cadastrado.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = produtos.map(p => `
+    <tr>
+      <td>${p.imagem_url ? `<img class="thumb" src="${p.imagem_url}" alt="${p.nome}" />` : `<div class="thumb-emoji">${p.emoji || '💈'}</div>`}</td>
+      <td style="font-weight:600">${p.nome}</td>
+      <td style="color:var(--muted);font-size:.8rem">${p.categoria}</td>
+      <td style="color:var(--gold);font-weight:700">R$ ${fmt(p.preco)}</td>
+      <td>${p.destaque ? '⭐' : '—'}</td>
+      <td><div class="td-actions">
+        <button class="btn-icon btn-edit" onclick="editProduto(${p.id})">✏️ Editar</button>
+        <button class="btn-icon btn-delete" onclick="deleteProduto(${p.id})">🗑 Excluir</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+async function saveProduto() {
+  const payload = {
+    nome: document.getElementById('pNome').value.trim(),
+    categoria: document.getElementById('pCategoria').value,
+    preco: parseFloat(document.getElementById('pPreco').value),
+    preco_antigo: parseFloat(document.getElementById('pPrecoAntigo').value) || null,
+    desconto: document.getElementById('pDesconto').value.trim() || null,
+    parcelas: document.getElementById('pParcelas').value.trim() || null,
+    emoji: document.getElementById('pEmoji').value.trim() || '💈',
+    imagem_url: document.getElementById('pImagemUrl').value.trim() || null,
+    destaque: document.getElementById('pDestaque').checked,
+  };
+  if (!payload.nome || !payload.categoria || !payload.preco) {
+    showToast('⚠️ Preencha nome, categoria e preço.'); return;
+  }
+  const btn = document.querySelector('#produtoForm .btn-primary');
+  btn.disabled = true; btn.textContent = '⏳ Salvando...';
+  try {
+    if (editingProdutoId) {
+      await api('produtos', { method: 'PUT', body: JSON.stringify({ id: editingProdutoId, ...payload }) });
+      editingProdutoId = null;
+    } else {
+      await api('produtos', { method: 'POST', body: JSON.stringify(payload) });
+    }
+    await loadProdutos();
+    clearProdutoForm();
+    showToast('✅ Produto salvo!');
+  } catch (e) {
+    showToast('❌ Erro: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar produto';
+  }
+}
+
+function editProduto(id) {
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  editingProdutoId = id;
+  document.getElementById('pNome').value = p.nome;
+  document.getElementById('pCategoria').value = p.categoria;
+  document.getElementById('pPreco').value = p.preco;
+  document.getElementById('pPrecoAntigo').value = p.preco_antigo || '';
+  document.getElementById('pDesconto').value = p.desconto || '';
+  document.getElementById('pParcelas').value = p.parcelas || '';
+  document.getElementById('pEmoji').value = p.emoji || '';
+  document.getElementById('pImagemUrl').value = p.imagem_url || '';
+  document.getElementById('pDestaque').checked = !!p.destaque;
+  document.querySelector('#produtoForm .btn-primary').textContent = '💾 Atualizar produto';
+  document.getElementById('produtoForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function deleteProduto(id) {
+  if (!confirm('Excluir este produto?')) return;
+  try {
+    await api(`produtos?id=${id}`, { method: 'DELETE' });
+    produtos = produtos.filter(p => p.id !== id);
+    renderProdutosTable();
+    showToast('🗑 Produto removido.');
+  } catch (e) { showToast('❌ Erro: ' + e.message); }
+}
+
+function clearProdutoForm() {
+  editingProdutoId = null;
+  ['pNome','pPreco','pPrecoAntigo','pDesconto','pParcelas','pEmoji','pImagemUrl'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pCategoria').value = '';
+  document.getElementById('pDestaque').checked = false;
+  document.querySelector('#produtoForm .btn-primary').textContent = '💾 Salvar produto';
+}
+
+/* ══ KITS ══════════════════════════════════════════ */
+async function loadKits() {
+  kits = await api('kits');
+  renderKitsTable();
+}
+
+function renderKitsTable() {
+  const tbody = document.getElementById('kitsTable');
+  if (!kits.length) {
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty"><div class="empty-icon">📦</div>Nenhum kit cadastrado.</div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = kits.map(k => `
+    <tr>
+      <td style="font-weight:600">${k.nome}</td>
+      <td style="color:var(--muted);font-size:.8rem">${k.tag || '—'}</td>
+      <td style="color:var(--gold);font-weight:700">R$ ${fmt(k.preco)}</td>
+      <td><div class="td-actions">
+        <button class="btn-icon btn-edit" onclick="editKit(${k.id})">✏️ Editar</button>
+        <button class="btn-icon btn-delete" onclick="deleteKit(${k.id})">🗑 Excluir</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+async function saveKit() {
+  const itensTexto = document.getElementById('kItens').value.trim();
+  const payload = {
+    nome: document.getElementById('kNome').value.trim(),
+    preco: parseFloat(document.getElementById('kPreco').value),
+    preco_antigo: parseFloat(document.getElementById('kPrecoAntigo').value) || null,
+    desconto: document.getElementById('kDesconto').value.trim() || null,
+    tag: document.getElementById('kTag').value.trim() || null,
+    descricao: document.getElementById('kDescricao').value.trim() || null,
+    itens: itensTexto ? itensTexto.split('\n').map(s => s.trim()).filter(Boolean) : [],
+  };
+  if (!payload.nome || !payload.preco) { showToast('⚠️ Preencha nome e preço.'); return; }
+  const btn = document.querySelector('#kitForm .btn-primary');
+  btn.disabled = true; btn.textContent = '⏳ Salvando...';
+  try {
+    if (editingKitId) {
+      await api('kits', { method: 'PUT', body: JSON.stringify({ id: editingKitId, ...payload }) });
+      editingKitId = null;
+    } else {
+      await api('kits', { method: 'POST', body: JSON.stringify(payload) });
+    }
+    await loadKits();
+    clearKitForm();
+    showToast('✅ Kit salvo!');
+  } catch (e) {
+    showToast('❌ Erro: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '💾 Salvar kit';
+  }
+}
+
+function editKit(id) {
+  const k = kits.find(x => x.id === id);
+  if (!k) return;
+  editingKitId = id;
+  document.getElementById('kNome').value = k.nome;
+  document.getElementById('kPreco').value = k.preco;
+  document.getElementById('kPrecoAntigo').value = k.preco_antigo || '';
+  document.getElementById('kDesconto').value = k.desconto || '';
+  document.getElementById('kTag').value = k.tag || '';
+  document.getElementById('kDescricao').value = k.descricao || '';
+  document.getElementById('kItens').value = (k.itens || []).join('\n');
+  document.querySelector('#kitForm .btn-primary').textContent = '💾 Atualizar kit';
+  document.getElementById('kitForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function deleteKit(id) {
+  if (!confirm('Excluir este kit?')) return;
+  try {
+    await api(`kits?id=${id}`, { method: 'DELETE' });
+    kits = kits.filter(k => k.id !== id);
+    renderKitsTable();
+    showToast('🗑 Kit removido.');
+  } catch (e) { showToast('❌ Erro: ' + e.message); }
+}
+
+function clearKitForm() {
+  editingKitId = null;
+  ['kNome','kPreco','kPrecoAntigo','kDesconto','kTag','kDescricao','kItens'].forEach(id => document.getElementById(id).value = '');
+  document.querySelector('#kitForm .btn-primary').textContent = '💾 Salvar kit';
+}
+
+/* ══ PEDIDOS ═══════════════════════════════════════ */
+async function renderPedidos() {
+  const el = document.getElementById('pedidosList');
+  el.innerHTML = `<div class="empty"><div class="empty-icon">⏳</div>Carregando pedidos...</div>`;
+  try {
+    const data = await api('pedidos');
+    if (!data.length) {
+      el.innerHTML = `<div class="empty"><div class="empty-icon">🛒</div>Nenhum pedido ainda.</div>`;
+      return;
+    }
+    el.innerHTML = `<div class="pedidos-list">` + data.map(ped => {
+      const dataFmt = new Date(ped.criado_em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+      const itensTxt = (ped.itens || []).map(i => `${i.qty}x ${i.nome}`).join(', ');
+      return `
+        <div class="pedido-card">
+          <div class="pedido-head">
+            <div>
+              <div class="pedido-num">Pedido #${ped.id}</div>
+              <div class="pedido-meta">📅 ${dataFmt}</div>
+            </div>
+            <select class="status-select" onchange="updatePedidoStatus(${ped.id}, this.value)">
+              ${['novo','em_andamento','concluido','cancelado'].map(s =>
+                `<option value="${s}" ${ped.status === s ? 'selected' : ''}>${s.replace('_',' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`
+              ).join('')}
+            </select>
+          </div>
+          <div class="pedido-itens">${itensTxt || '—'}</div>
+          <div class="pedido-footer">
+            <span class="pedido-total">R$ ${fmt(ped.total)}</span>
+            <button class="btn-icon btn-delete" onclick="deletePedido(${ped.id})">🗑 Remover</button>
+          </div>
+        </div>`;
+    }).join('') + `</div>`;
+  } catch (e) {
+    el.innerHTML = `<div class="empty">❌ Erro ao carregar pedidos.</div>`;
+  }
+}
+
+async function updatePedidoStatus(id, status) {
+  try {
+    await api('pedidos', { method: 'PUT', body: JSON.stringify({ id, status }) });
+    showToast('✅ Status atualizado!');
+  } catch (e) { showToast('❌ Erro: ' + e.message); }
+}
+
+async function deletePedido(id) {
+  if (!confirm('Remover este pedido?')) return;
+  try {
+    await api(`pedidos?id=${id}`, { method: 'DELETE' });
+    renderPedidos();
+    showToast('🗑 Pedido removido.');
+  } catch (e) { showToast('❌ Erro: ' + e.message); }
+}
+
+/* ══ UTILS ═════════════════════════════════════════ */
+function fmt(n) { return parseFloat(n).toFixed(2).replace('.', ','); }
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+</script>
+</body>
+</html>
