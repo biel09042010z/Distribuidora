@@ -938,6 +938,48 @@
       .ticker-track { animation: none; }
       * { transition: none !important; animation: none !important; }
     }
+
+    /* ── BRAND TABS ── */
+    .brand-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .brand-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .brand-tab:hover { border-color: var(--gold); }
+    .brand-tab.active[data-marca="todos"]  { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .brand-tab.active[data-marca="classe-a"] { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+    .brand-tab.active[data-marca="fox"]      { background: #7b2d00; color: #fff; border-color: #7b2d00; }
+    .brand-tab .brand-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .brand-tab[data-marca="classe-a"] .brand-dot { background: #1a1a2e; }
+    .brand-tab[data-marca="fox"] .brand-dot       { background: #c0441d; }
+    .brand-tab[data-marca="todos"] .brand-dot      { background: var(--gold); }
+    .brand-tab.active .brand-dot { background: rgba(255,255,255,0.7); }
+
+    .prod-loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -1103,19 +1145,35 @@
     <div class="prod-header">
       <div>
         <p class="section-label">Catálogo</p>
-        <h2 class="section-title" id="prod-title">Mais Vendidos</h2>
-      </div>
-      <div class="filter-tabs" role="group" aria-label="Filtrar por categoria">
-        <button class="filter-tab active" onclick="setFilter('todos')" aria-pressed="true">Todos</button>
-        <button class="filter-tab" onclick="setFilter('pomada')" aria-pressed="false">Pomadas</button>
-        <button class="filter-tab" onclick="setFilter('gel')" aria-pressed="false">Gel</button>
-        <button class="filter-tab" onclick="setFilter('shaving')" aria-pressed="false">Shaving</button>
-        <button class="filter-tab" onclick="setFilter('barba')" aria-pressed="false">Barba</button>
-        <button class="filter-tab" onclick="setFilter('shampoo')" aria-pressed="false">Shampoo</button>
+        <h2 class="section-title" id="prod-title">Nossos Produtos</h2>
       </div>
     </div>
-    <div class="prod-grid" id="prodGrid" role="list">
-      <!-- JS renderiza -->
+
+    <!-- BRAND TABS -->
+    <div class="brand-tabs" role="group" aria-label="Filtrar por marca">
+      <button class="brand-tab active" data-marca="todos" onclick="setBrand('todos')" aria-pressed="true">
+        <span class="brand-dot"></span> Todas as Marcas
+      </button>
+      <button class="brand-tab" data-marca="classe-a" onclick="setBrand('classe-a')" aria-pressed="false">
+        <span class="brand-dot"></span> Classe A
+      </button>
+      <button class="brand-tab" data-marca="fox" onclick="setBrand('fox')" aria-pressed="false">
+        <span class="brand-dot"></span> Fox for Men
+      </button>
+    </div>
+
+    <!-- CATEGORY FILTER TABS -->
+    <div class="filter-tabs" role="group" aria-label="Filtrar por categoria" id="filterTabsRow">
+      <button class="filter-tab active" onclick="setFilter('todos')" aria-pressed="true">Todos</button>
+      <button class="filter-tab" onclick="setFilter('pomada')" aria-pressed="false">Pomadas</button>
+      <button class="filter-tab" onclick="setFilter('gel')" aria-pressed="false">Gel</button>
+      <button class="filter-tab" onclick="setFilter('shaving')" aria-pressed="false">Shaving</button>
+      <button class="filter-tab" onclick="setFilter('barba')" aria-pressed="false">Barba</button>
+      <button class="filter-tab" onclick="setFilter('shampoo')" aria-pressed="false">Shampoo</button>
+    </div>
+
+    <div class="prod-grid" id="prodGrid" role="list" style="margin-top:1.5rem">
+      <p class="prod-loading">Carregando produtos…</p>
     </div>
   </div>
 </section>
@@ -1351,45 +1409,53 @@
 </div>
 
 <script>
-  /* ── DADOS ── */
-  const produtos = [
-    { id:1, nome:'Pomada Matte 150g', cat:'pomada', emoji:'💈', img:'', preco:24.99, old:40.00, off:'-38%', hot:true, parcelas:'5x R$5,71' },
-    { id:2, nome:'Pomada Caramelo 150g', cat:'pomada', emoji:'🍮', img:'', preco:24.99, old:40.00, off:'-38%', hot:false, parcelas:'5x R$5,71' },
-    { id:3, nome:'Pomada Incolor Extra Forte 150g', cat:'pomada', emoji:'💎', img:'', preco:24.99, old:40.00, off:'-38%', hot:true, parcelas:'5x R$5,71' },
-    { id:4, nome:'Pomada Black Pérola Negra 150g', cat:'pomada', emoji:'🖤', img:'', preco:24.99, old:40.00, off:'-38%', hot:false, parcelas:'5x R$5,71' },
-    { id:5, nome:'Pomada Efeito Teia 150g', cat:'pomada', emoji:'🕸️', img:'', preco:24.99, old:40.00, off:'-38%', hot:false, parcelas:'5x R$5,71' },
-    { id:6, nome:'Gel Cola Black 1L', cat:'gel', emoji:'💧', img:'', preco:39.99, old:54.00, off:'-26%', hot:true, parcelas:'4x R$11,09' },
-    { id:7, nome:'Gel Cola Cristal 1L', cat:'gel', emoji:'🫧', img:'', preco:36.99, old:50.00, off:'-26%', hot:false, parcelas:'4x R$10,27' },
-    { id:8, nome:'Shaving Cream Profissional 1L', cat:'shaving', emoji:'🪒', img:'', preco:34.99, old:46.00, off:'-24%', hot:true, parcelas:'4x R$9,72' },
-    { id:9, nome:'Shaving Gel Mentol 1L', cat:'shaving', emoji:'❄️', img:'', preco:34.99, old:46.00, off:'-24%', hot:false, parcelas:'4x R$9,72' },
-    { id:10, nome:'Óleo para Barba Prime 30ml', cat:'barba', emoji:'🧔', img:'', preco:28.99, old:40.00, off:'-28%', hot:true, parcelas:'4x R$8,06' },
-    { id:11, nome:'Balm para Barba 100ml', cat:'barba', emoji:'🧴', img:'', preco:32.99, old:45.00, off:'-27%', hot:false, parcelas:'4x R$9,16' },
-    { id:12, nome:'Shampoo 3 em 1 300ml', cat:'shampoo', emoji:'🚿', img:'', preco:22.99, old:32.00, off:'-28%', hot:false, parcelas:'3x R$8,33' },
-  ];
-
-
-  let filtroAtivo = 'todos';
+  /* ── STATE ── */
+  let todosProdutos = [];
+  let filtroAtivo  = 'todos';
+  let marcaAtiva   = 'todos';
   let cart = [];
+
+  /* ── CARREGAR DA API ── */
+  async function carregarProdutos() {
+    try {
+      const res  = await fetch('/api/produtos');
+      todosProdutos = await res.json();
+    } catch (e) {
+      // fallback offline — array vazio mostra mensagem
+      todosProdutos = [];
+    }
+    renderProdutos();
+  }
 
   /* ── RENDER PRODUTOS ── */
   function renderProdutos() {
     const grid = document.getElementById('prodGrid');
-    const lista = filtroAtivo === 'todos' ? produtos : produtos.filter(p => p.cat === filtroAtivo);
+    let lista = todosProdutos;
+    if (marcaAtiva !== 'todos') lista = lista.filter(p => p.marca === marcaAtiva);
+    if (filtroAtivo !== 'todos') lista = lista.filter(p => p.categoria === filtroAtivo);
+
+    if (!lista.length) {
+      grid.innerHTML = '<p class="prod-loading">Nenhum produto encontrado.</p>';
+      return;
+    }
+
     grid.innerHTML = lista.map(p => `
       <article class="prod-card" role="listitem">
         <div class="prod-img">
-          ${p.img ? `<img src="${p.img}" alt="${p.nome}" loading="lazy" />` : `<span class="prod-emoji">${p.emoji}</span>`}
-          ${p.hot ? '<span class="badge-hot">Top</span>' : ''}
-          ${p.off ? `<span class="badge-off">${p.off}</span>` : ''}
+          ${p.imagem_url
+            ? `<img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" />`
+            : `<span class="prod-emoji">${p.emoji || '💈'}</span>`}
+          ${p.destaque ? '<span class="badge-hot">Top</span>' : ''}
+          ${p.desconto ? `<span class="badge-off">${p.desconto}</span>` : ''}
         </div>
         <div class="prod-body">
-          <p class="prod-cat">${p.cat}</p>
+          <p class="prod-cat">${p.categoria}</p>
           <h3 class="prod-name">${p.nome}</h3>
           <div class="prod-price-row">
-            <span class="prod-price">R$${p.preco.toFixed(2).replace('.',',')}</span>
-            <span class="prod-old">R$${p.old.toFixed(2).replace('.',',')}</span>
+            <span class="prod-price">R$${Number(p.preco).toFixed(2).replace('.',',')}</span>
+            ${p.preco_antigo ? `<span class="prod-old">R$${Number(p.preco_antigo).toFixed(2).replace('.',',')}</span>` : ''}
           </div>
-          <small class="prod-installment">ou ${p.parcelas} sem juros</small>
+          ${p.parcelas ? `<small class="prod-installment">ou ${p.parcelas} sem juros</small>` : ''}
           <button class="btn-comprar" onclick="addToCart(${p.id})" aria-label="Adicionar ${p.nome} ao carrinho">
             🛒 Adicionar ao carrinho
           </button>
@@ -1398,12 +1464,28 @@
     `).join('');
   }
 
-  /* ── FILTER ── */
+  /* ── BRAND FILTER ── */
+  function setBrand(marca) {
+    marcaAtiva = marca;
+    filtroAtivo = 'todos'; // reset categoria ao trocar marca
+    document.querySelectorAll('.brand-tab').forEach(btn => {
+      const active = btn.dataset.marca === marca;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
+      btn.classList.toggle('active', i === 0);
+      btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+    });
+    renderProdutos();
+  }
+
+  /* ── CATEGORY FILTER ── */
   function setFilter(cat) {
     filtroAtivo = cat;
     document.querySelectorAll('.filter-tab').forEach(btn => {
-      const active = btn.textContent.trim().toLowerCase() === cat ||
-                     (cat === 'todos' && btn.textContent.trim() === 'Todos');
+      const txt = btn.textContent.trim().toLowerCase();
+      const active = txt === cat || (cat === 'todos' && txt === 'todos');
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
@@ -1412,7 +1494,7 @@
 
   /* ── CART ── */
   function addToCart(id) {
-    const prod = produtos.find(p => p.id === id);
+    const prod = todosProdutos.find(p => p.id === id);
     const existing = cart.find(i => i.id === id);
     if (existing) { existing.qty++; }
     else { cart.push({ ...prod, qty: 1 }); }
@@ -1469,7 +1551,7 @@
     if (!cart.length) { list.innerHTML = '<p class="cart-empty">Seu carrinho está vazio.</p>'; return; }
     list.innerHTML = cart.map(i => `
       <div class="cart-item">
-        <span class="cart-item-icon">${i.emoji}</span>
+        <span class="cart-item-icon">${i.emoji || '💈'}</span>
         <div class="cart-item-info">
           <p class="cart-item-name">${i.nome}</p>
           <p class="cart-item-price">R$${(i.preco * i.qty).toFixed(2).replace('.',',')}</p>
@@ -1512,7 +1594,7 @@
   }
 
   /* ── INIT ── */
-  renderProdutos();
+  carregarProdutos();
 </script>
 </body>
 </html>
