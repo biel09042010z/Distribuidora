@@ -1424,6 +1424,7 @@
       // fallback offline — array vazio mostra mensagem
       todosProdutos = [];
     }
+    atualizarCategorias('todos');
     renderProdutos();
   }
 
@@ -1439,12 +1440,18 @@
       return;
     }
 
-    grid.innerHTML = lista.map(p => `
+    // Filtra apenas produtos com imagem — não exibe quadrado cinza/placeholder
+    const listaComFoto = lista.filter(p => p.imagem_url);
+
+    if (!listaComFoto.length) {
+      grid.innerHTML = '<p class="prod-loading">Nenhum produto encontrado.</p>';
+      return;
+    }
+
+    grid.innerHTML = listaComFoto.map(p => `
       <article class="prod-card" role="listitem">
         <div class="prod-img">
-          ${p.imagem_url
-            ? `<img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" />`
-            : `<span class="prod-emoji">${p.emoji || '💈'}</span>`}
+          <img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" />
           ${p.destaque ? '<span class="badge-hot">Top</span>' : ''}
           ${p.desconto ? `<span class="badge-off">${p.desconto}</span>` : ''}
         </div>
@@ -1464,6 +1471,34 @@
     `).join('');
   }
 
+  /* ── CATEGORIAS DINÂMICAS POR MARCA ── */
+  // Mapeamento de label visível → valor usado no DB
+  const CATEGORIAS = [
+    { label: 'Todos',    value: 'todos'   },
+    { label: 'Pomadas',  value: 'pomada'  },
+    { label: 'Gel',      value: 'gel'     },
+    { label: 'Shaving',  value: 'shaving' },
+    { label: 'Barba',    value: 'barba'   },
+    { label: 'Shampoo',  value: 'shampoo' },
+  ];
+
+  function atualizarCategorias(marca) {
+    // Descobre quais categorias existem para a marca selecionada (com foto)
+    const listaMarca = marca === 'todos'
+      ? todosProdutos
+      : todosProdutos.filter(p => p.marca === marca);
+    const comFoto = listaMarca.filter(p => p.imagem_url);
+    const catsExistentes = new Set(comFoto.map(p => p.categoria));
+
+    const row = document.getElementById('filterTabsRow');
+    row.innerHTML = CATEGORIAS
+      .filter(c => c.value === 'todos' || catsExistentes.has(c.value))
+      .map((c, i) => {
+        const ativo = i === 0;
+        return `<button class="filter-tab${ativo ? ' active' : ''}" onclick="setFilter('${c.value}')" aria-pressed="${ativo}">${c.label}</button>`;
+      }).join('');
+  }
+
   /* ── BRAND FILTER ── */
   function setBrand(marca) {
     marcaAtiva = marca;
@@ -1473,10 +1508,7 @@
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
-    document.querySelectorAll('.filter-tab').forEach((btn, i) => {
-      btn.classList.toggle('active', i === 0);
-      btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-    });
+    atualizarCategorias(marca);
     renderProdutos();
   }
 
