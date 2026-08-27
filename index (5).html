@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Distribuidora premium de produtos capilares para barbearias, salões e revendedores. Pomadas, óleos, shaving, kits atacado e muito mais." />
+  <title>CapilPro — Distribuidora de Produtos Capilares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #FFFFFF;
+      --surface: #F4F4F2;
+      --card:    #FFFFFF;
+      --border:  #E3E3E0;
+      --gold:    #C2790A;
+      --gold-lt: #E89A2E;
+      --gold-dk: #94590A;
+      --white:   #15161A;
+      --muted:   #6B6B68;
+      --radius:  10px;
+      --wpp:     #25D366;
+      --ink:     #15161A;
+      --accent:  #E1251B;
+      --accent-dk: #B01B13;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+    }
+    .ticker-track {
+      display: inline-flex;
+      animation: ticker 28s linear infinite;
+    }
+    .ticker-track span { padding: 0 3rem; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(20,20,20,0.04);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.03em;
+    }
+    .logo span { color: var(--gold); }
+
+    nav { display: flex; gap: 1.9rem; align-items: center; }
+    nav a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--gold); }
+
+    /* ── MEGA MENU ── */
+    .has-mega { position: relative; }
+    .mega-panel {
+      position: absolute;
+      top: calc(100% + 18px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 48px rgba(20,20,20,0.14);
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px,1fr));
+      gap: 1.5rem;
+      min-width: 620px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(8px);
+      transition: opacity .18s, transform .18s, visibility .18s;
+      z-index: 50;
+    }
+    .has-mega:hover .mega-panel,
+    .mega-panel:hover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mega-col h4 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .mega-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .mega-col li a {
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .mega-col li a:hover { color: var(--gold); }
+    @media (max-width: 900px) { .mega-panel { display: none; } }
+
+    .btn-wpp-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--gold);
+      color: var(--black);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      transition: background .2s, transform .15s;
+    }
+    .btn-wpp-header:hover { background: var(--gold-lt); transform: scale(1.03); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* ── MOBILE NAV ── */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--surface);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.4rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+    .mobile-nav a:hover { color: var(--gold); }
+    .mobile-nav-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 20%, rgba(201,168,76,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(201,168,76,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--ink);
+      border-radius: 6px;
+      padding: 0.4rem 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.6rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+      max-width: 820px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+      font-weight: 400;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--ink);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.95rem 2.2rem;
+      border-radius: 8px;
+      letter-spacing: 0.02em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 0 0 rgba(20,20,20,0);
+    }
+    .btn-primary:hover {
+      background: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(194,121,10,0.3);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 0.95rem 2.2rem;
+      border-radius: 8px;
+      border: 2px solid var(--ink);
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-outline:hover { background: var(--ink); color: #fff; }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat strong {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .stat span { font-size: 0.82rem; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 400;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── CATEGORIAS ── */
+    #categorias { background: var(--surface); }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .cat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(20,20,20,0.05);
+      transition: border-color .25s, transform .2s, box-shadow .25s;
+      text-decoration: none;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .cat-card:hover { border-color: var(--gold); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(20,20,20,0.08); }
+    .cat-icon {
+      font-size: 1.8rem;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      border-radius: 50%;
+    }
+    .cat-card:hover .cat-icon { background: var(--gold); }
+    .cat-card h3 { font-size: 0.88rem; font-weight: 700; }
+    .cat-card span { font-size: 0.72rem; color: var(--muted); }
+
+    /* ── PRODUTOS ── */
+    .prod-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .filter-tab.active,
+    .filter-tab:hover {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .prod-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 1px 3px rgba(20,20,20,0.05);
+      transition: border-color .25s, transform .2s, box-shadow .25s;
+    }
+    .prod-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 12px 28px rgba(20,20,20,0.10); }
+
+    .prod-img {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .prod-emoji { font-size: 4rem; }
+    .prod-img::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt), var(--gold-dk));
+      transform: scaleX(0);
+      transition: transform .3s;
+    }
+    .prod-card:hover .prod-img::after { transform: scaleX(1); }
+
+    .badge-hot {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge-off {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .prod-body { padding: 1rem; }
+    .prod-cat { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+    .prod-name { font-size: 0.92rem; font-weight: 600; margin: 0.25rem 0 0.75rem; line-height: 1.3; }
+    .prod-price-row { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .prod-price { font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+    .prod-old { font-size: 0.8rem; color: var(--muted); text-decoration: line-through; }
+    .prod-installment { font-size: 0.72rem; color: var(--muted); display: block; margin-top: -0.4rem; margin-bottom: 0.75rem; }
+
+    .btn-comprar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      width: 100%;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .15s;
+      letter-spacing: 0.02em;
+    }
+    .btn-comprar:hover { background: var(--gold); transform: scale(1.01); }
+
+    /* ── KITS / ATACADO ── */
+    #kits { background: var(--surface); }
+    .kits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .kit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(20,20,20,0.05);
+      transition: border-color .25s, transform .2s, box-shadow .25s;
+    }
+    .kit-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold-lt));
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .kit-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .kit-card:hover::before { opacity: 1; }
+
+    .kit-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .kit-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dk);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+    .kit-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.3; }
+    .kit-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.5; }
+    .kit-price-row { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+    .kit-price { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+    .kit-old { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; }
+    .kit-off {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+    .kit-items { list-style: none; margin-bottom: 1.25rem; }
+    .kit-items li {
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .kit-items li::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: 0.75rem; }
+
+    /* ── BENEFÍCIOS ── */
+    #beneficios { background: var(--black); }
+    .benef-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .benef-card {
+      text-align: center;
+      padding: 2rem 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: border-color .2s;
+    }
+    .benef-card:hover { border-color: var(--gold-dk); }
+    .benef-icon { font-size: 2.25rem; margin-bottom: 0.75rem; }
+    .benef-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .benef-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── CONTATO / CTA ── */
+    #contato {
+      background: var(--black);
+      text-align: center;
+    }
+    .cta-box {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      border-radius: 16px;
+      background: var(--ink);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(226,150,30,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .cta-box p { color: #B8B7B2; font-size: 0.95rem; margin-bottom: 2rem; }
+    .cta-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .btn-wpp-big {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--wpp);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 999px;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-wpp-big:hover { opacity: 0.88; transform: translateY(-2px); }
+    .contact-info { font-size: 0.82rem; color: #B8B7B2; }
+    .contact-info a { color: var(--gold-lt); text-decoration: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 3.5rem 1.5rem 1.5rem;
+    }
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .footer-logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .footer-logo span { color: var(--gold-lt); }
+    .footer-desc { font-size: 0.82rem; color: #A7A6A2; line-height: 1.7; margin-bottom: 1.25rem; }
+    .footer-social { display: flex; gap: 0.6rem; }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #A7A6A2;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .social-btn:hover { border-color: var(--gold-lt); color: #fff; background: rgba(255,255,255,0.06); }
+
+    .footer-col h4 {
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 1rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col li a {
+      color: #A7A6A2;
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: color .2s;
+    }
+    .footer-col li a:hover { color: #fff; }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.75rem;
+      color: #82817D;
+    }
+    .footer-bottom a { color: #82817D; text-decoration: none; }
+
+    .pay-icons { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+    .pay-icon {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 6px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.7rem;
+      color: #A7A6A2;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── PADLOCK ADMIN ── */
+    .admin-link {
+      color: #55544F !important;
+      font-size: 0.65rem;
+      transition: color .3s !important;
+    }
+    .admin-link:hover { color: #A7A6A2 !important; }
+
+    /* ── TOAST / CART ── */
+    .cart-header-btn {
+      background: var(--ink);
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: background .2s, transform .15s;
+      text-decoration: none;
+      color: #fff;
+    }
+    .cart-header-btn:hover { background: var(--gold); border-color: var(--gold); transform: scale(1.03); }
+    .cart-count {
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.7rem;
+      font-weight: 800;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wpp-float {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 150;
+      background: var(--wpp);
+      color: #fff;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .wpp-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+
+    /* ── CART MODAL ── */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 300;
+      display: none;
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+    .cart-overlay.open { display: flex; }
+    .cart-panel {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+    }
+    .cart-panel-head h3 { font-size: 1rem; font-weight: 700; }
+    .cart-close-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: color .2s;
+    }
+    .cart-close-btn:hover { color: var(--white); }
+    .cart-items-list { flex: 1; padding: 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+    .cart-empty { text-align: center; color: var(--muted); font-size: 0.9rem; padding: 3rem 0; }
+    .cart-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem;
+    }
+    .cart-item-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cart-item-price { font-size: 0.78rem; color: var(--gold); }
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--white);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .2s;
+    }
+    .qty-btn:hover { border-color: var(--gold); }
+    .qty-val { font-size: 0.82rem; font-weight: 600; min-width: 16px; text-align: center; }
+    .cart-rm-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color .2s;
+    }
+    .cart-rm-btn:hover { color: #e55; }
+
+    .cart-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      bottom: 0;
+    }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .cart-total span:last-child { color: var(--gold); font-family: 'Poppins', sans-serif; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      top: 5rem;
+      right: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--gold-dk);
+      border-radius: 10px;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 400;
+      transform: translateX(120%);
+      transition: transform .3s;
+      max-width: 280px;
+    }
+    .toast.show { transform: translateX(0); }
+    .toast strong { color: var(--gold); display: block; font-size: 0.78rem; margin-bottom: 0.1rem; }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 900px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .cart-panel { max-width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      * { transition: none !important; animation: none !important; }
+    }
+
+    /* ── BRAND TABS ── */
+    .brand-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .brand-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+    }
+    .brand-tab:hover { border-color: var(--gold); }
+    .brand-tab.active[data-marca="todos"]  { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .brand-tab.active[data-marca="classe-a"] { background: #1a1a2e; color: #fff; border-color: #1a1a2e; }
+    .brand-tab.active[data-marca="fox"]      { background: #7b2d00; color: #fff; border-color: #7b2d00; }
+    .brand-tab .brand-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .brand-tab[data-marca="classe-a"] .brand-dot { background: #1a1a2e; }
+    .brand-tab[data-marca="fox"] .brand-dot       { background: #c0441d; }
+    .brand-tab[data-marca="todos"] .brand-dot      { background: var(--gold); }
+    .brand-tab.active .brand-dot { background: rgba(255,255,255,0.7); }
+
+    .prod-loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span>🚚 FRETE GRÁTIS A PARTIR DE R$300 PARA SUDESTE</span>
+    <span>🎟️ USE O CUPOM 'BOASVINDAS' NA SUA PRIMEIRA COMPRA</span>
+    <span>🚚 FRETE GRÁTIS A PARTIR DE R$500 PARA NORDESTE</span>
+    <span>💳 5% DE DESCONTO NO PIX E 2% NO BOLETO</span>
+    <span>🚚 FRETE GRÁTIS A PARTIR DE R$300 PARA SUDESTE</span>
+    <span>🎟️ USE O CUPOM 'BOASVINDAS' NA SUA PRIMEIRA COMPRA</span>
+    <span>🚚 FRETE GRÁTIS A PARTIR DE R$500 PARA NORDESTE</span>
+    <span>💳 5% DE DESCONTO NO PIX E 2% NO BOLETO</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Capil<span>Pro</span></a>
+    <nav aria-label="Navegação principal">
+      <div class="has-mega">
+        <a href="#categorias">Categorias ▾</a>
+        <div class="mega-panel" role="menu">
+          <div class="mega-col">
+            <h4>Pomada</h4>
+            <ul>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Ver tudo em Pomada</a></li>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Black</a></li>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Caramelo</a></li>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Incolor</a></li>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Matte</a></li>
+              <li><a href="#produtos" onclick="setFilter('pomada')">Teia</a></li>
+            </ul>
+          </div>
+          <div class="mega-col">
+            <h4>Gel</h4>
+            <ul>
+              <li><a href="#produtos" onclick="setFilter('gel')">Ver tudo em Gel</a></li>
+              <li><a href="#produtos" onclick="setFilter('gel')">Gel Cola</a></li>
+              <li><a href="#produtos" onclick="setFilter('gel')">Gel Cola Black</a></li>
+            </ul>
+            <h4 style="margin-top:1.1rem">Shaving</h4>
+            <ul>
+              <li><a href="#produtos" onclick="setFilter('shaving')">Shaving em Creme</a></li>
+              <li><a href="#produtos" onclick="setFilter('shaving')">Shaving em Gel</a></li>
+            </ul>
+          </div>
+          <div class="mega-col">
+            <h4>Tratamento p/ Barba</h4>
+            <ul>
+              <li><a href="#produtos" onclick="setFilter('barba')">Óleo para Barba</a></li>
+              <li><a href="#produtos" onclick="setFilter('barba')">Balm para Barba</a></li>
+              <li><a href="#produtos" onclick="setFilter('barba')">Loção Pós-Barba</a></li>
+              <li><a href="#produtos" onclick="setFilter('shampoo')">Shampoo &amp; Condicionador</a></li>
+            </ul>
+          </div>
+          <div class="mega-col">
+            <h4>Outras Linhas</h4>
+            <ul>
+              <li><a href="#produtos" onclick="setFilter('alisante')">Alisante</a></li>
+              <li><a href="#produtos" onclick="setFilter('descolorante')">Pó Descolorante &amp; OX</a></li>
+              <li><a href="#produtos" onclick="setFilter('acessorios')">Acessórios</a></li>
+              <li><a href="#kits">Kits Atacado</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <a href="#produtos">Produtos</a>
+      <a href="#kits">Kits Atacado</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div style="display:flex;gap:0.75rem;align-items:center">
+      <a href="#" class="cart-header-btn" onclick="openCart(event)" aria-label="Ver carrinho">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+      </a>
+      <button class="hamburger" aria-label="Abrir menu" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<nav id="mobileNav" class="mobile-nav" aria-label="Menu mobile">
+  <button class="mobile-nav-close" aria-label="Fechar menu" onclick="document.getElementById('mobileNav').classList.remove('open')">✕</button>
+  <a href="#categorias" onclick="document.getElementById('mobileNav').classList.remove('open')">Categorias</a>
+  <a href="#produtos" onclick="document.getElementById('mobileNav').classList.remove('open')">Produtos</a>
+  <a href="#kits" onclick="document.getElementById('mobileNav').classList.remove('open')">Kits Atacado</a>
+  <a href="#contato" onclick="document.getElementById('mobileNav').classList.remove('open')">Contato</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-title">
+  <div>
+    <span class="hero-eyebrow">Distribuidora Premium</span>
+    <h1 id="hero-title">
+      Produtos capilares<br />que <em>vendem sozinhos</em>
+    </h1>
+    <p>Fornecemos para barbearias, salões, revendedores e consumidores finais. Qualidade profissional, preço de atacado, entrega para todo o Brasil.</p>
+    <div class="hero-actions">
+      <a href="#produtos" class="btn-primary">Ver catálogo completo ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIAS -->
+<section id="categorias" aria-labelledby="cat-title">
+  <div class="container">
+    <p class="section-label">Navegue por</p>
+    <h2 class="section-title" id="cat-title">Categorias</h2>
+    <p class="section-sub">Do styling ao tratamento — tudo que profissional e revendedor precisam.</p>
+    <div class="cat-grid" role="list">
+      <a class="cat-card" href="#produtos" data-filter="pomada" onclick="setFilter('pomada')" role="listitem">
+        <span class="cat-icon">💈</span>
+        <h3>Pomadas</h3>
+        <span>Matte · Caramelo · Black</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="gel" onclick="setFilter('gel')" role="listitem">
+        <span class="cat-icon">💧</span>
+        <h3>Gel</h3>
+        <span>Cola · Cola Black</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="shaving" onclick="setFilter('shaving')" role="listitem">
+        <span class="cat-icon">🪒</span>
+        <h3>Shaving</h3>
+        <span>Creme · Gel</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="barba" onclick="setFilter('barba')" role="listitem">
+        <span class="cat-icon">🧔</span>
+        <h3>Tratamento</h3>
+        <span>Óleo · Balm · Tônico</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="shampoo" onclick="setFilter('shampoo')" role="listitem">
+        <span class="cat-icon">🧴</span>
+        <h3>Shampoo</h3>
+        <span>Shampoo · Condicionador</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="alisante" onclick="setFilter('alisante')" role="listitem">
+        <span class="cat-icon">✨</span>
+        <h3>Alisante</h3>
+        <span>Progressiva · Relaxamento</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="descolorante" onclick="setFilter('descolorante')" role="listitem">
+        <span class="cat-icon">⚗️</span>
+        <h3>Descolorante</h3>
+        <span>Pó · OX</span>
+      </a>
+      <a class="cat-card" href="#produtos" data-filter="acessorios" onclick="setFilter('acessorios')" role="listitem">
+        <span class="cat-icon">✂️</span>
+        <h3>Acessórios</h3>
+        <span>Ferramentas profissionais</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTOS -->
+<section id="produtos" aria-labelledby="prod-title">
+  <div class="container">
+    <div class="prod-header">
+      <div>
+        <p class="section-label">Catálogo</p>
+        <h2 class="section-title" id="prod-title">Nossos Produtos</h2>
+      </div>
+    </div>
+
+    <!-- BRAND TABS -->
+    <div class="brand-tabs" role="group" aria-label="Filtrar por marca">
+      <button class="brand-tab active" data-marca="todos" onclick="setBrand('todos')" aria-pressed="true">
+        <span class="brand-dot"></span> Todas as Marcas
+      </button>
+      <button class="brand-tab" data-marca="classe-a" onclick="setBrand('classe-a')" aria-pressed="false">
+        <span class="brand-dot"></span> Classe A
+      </button>
+      <button class="brand-tab" data-marca="fox-for-men" onclick="setBrand('fox-for-men')" aria-pressed="false">
+        <span class="brand-dot"></span> Fox for Men
+      </button>
+    </div>
+
+    <!-- CATEGORY FILTER TABS -->
+    <div class="filter-tabs" role="group" aria-label="Filtrar por categoria" id="filterTabsRow">
+      <button class="filter-tab active" onclick="setFilter('todos')" aria-pressed="true">Todos</button>
+      <button class="filter-tab" onclick="setFilter('pomada')" aria-pressed="false">Pomadas</button>
+      <button class="filter-tab" onclick="setFilter('gel')" aria-pressed="false">Gel</button>
+      <button class="filter-tab" onclick="setFilter('shaving')" aria-pressed="false">Shaving</button>
+      <button class="filter-tab" onclick="setFilter('barba')" aria-pressed="false">Barba</button>
+      <button class="filter-tab" onclick="setFilter('shampoo')" aria-pressed="false">Shampoo</button>
+    </div>
+
+    <div class="prod-grid" id="prodGrid" role="list" style="margin-top:1.5rem">
+      <p class="prod-loading">Carregando produtos…</p>
+    </div>
+  </div>
+</section>
+
+<!-- KITS ATACADO -->
+<section id="kits" aria-labelledby="kits-title">
+  <div class="container">
+    <p class="section-label">Preço de Atacado</p>
+    <h2 class="section-title" id="kits-title">Kits para Profissionais</h2>
+    <p class="section-sub">Monte sua bancada com os kits mais vendidos. Quanto mais você compra, mais economiza.</p>
+    <div class="kits-grid" role="list">
+
+      <article class="kit-card" role="listitem">
+        <div class="kit-icon">💈</div>
+        <span class="kit-tag">Mais Vendido</span>
+        <h3 class="kit-name">Kit Bancada Barbeiro</h3>
+        <p class="kit-desc">Tudo que sua barbearia precisa em um único pedido, com os produtos mais requisitados pelos clientes.</p>
+        <div class="kit-price-row">
+          <span class="kit-price">R$189,99</span>
+          <span class="kit-old">R$245,70</span>
+          <span class="kit-off">-23%</span>
+        </div>
+        <ul class="kit-items">
+          <li>3 Pomadas Modeladoras 150g</li>
+          <li>2L Shaving Cream Profissional</li>
+          <li>1 Balm para Barba 100ml</li>
+          <li>1 Óleo para Barba 30ml</li>
+          <li>1 Loção Pós-Barba 150ml</li>
+        </ul>
+        <a href="https://wa.me/5511999999999?text=Quero%20o%20Kit%20Bancada%20Barbeiro%20R%24189%2C99" target="_blank" rel="noopener" class="btn-comprar">
+          📲 Pedir pelo WhatsApp
+        </a>
+      </article>
+
+      <article class="kit-card" role="listitem">
+        <div class="kit-icon">👑</div>
+        <span class="kit-tag">Premium</span>
+        <h3 class="kit-name">Kit Bancada Prime</h3>
+        <p class="kit-desc">Kit completo para barbearias de alto movimento. Variedade máxima, margem máxima de revenda.</p>
+        <div class="kit-price-row">
+          <span class="kit-price">R$424,99</span>
+          <span class="kit-old">R$750,00</span>
+          <span class="kit-off">-43%</span>
+        </div>
+        <ul class="kit-items">
+          <li>25 Pomadas Modeladoras 70g (mix)</li>
+          <li>5 Balms para Barba 100ml</li>
+          <li>6 Óleos para Barba 30ml</li>
+          <li>1 Shaving Mentol 1L</li>
+          <li>1 Shaving Cream 1L</li>
+        </ul>
+        <a href="https://wa.me/5511999999999?text=Quero%20o%20Kit%20Bancada%20Prime%20R%24424%2C99" target="_blank" rel="noopener" class="btn-comprar">
+          📲 Pedir pelo WhatsApp
+        </a>
+      </article>
+
+      <article class="kit-card" role="listitem">
+        <div class="kit-icon">⚡</div>
+        <span class="kit-tag">Iniciante</span>
+        <h3 class="kit-name">Kit Barber's Simple</h3>
+        <p class="kit-desc">Ideal para quem está montando a barbearia ou quer testar a linha antes de escalar o pedido.</p>
+        <div class="kit-price-row">
+          <span class="kit-price">R$149,99</span>
+          <span class="kit-old">R$172,50</span>
+          <span class="kit-off">-13%</span>
+        </div>
+        <ul class="kit-items">
+          <li>10 Pomadas Modeladoras 70g</li>
+          <li>1 Shaving Cream 1L</li>
+          <li>1 Loção Pós-Barba 150ml</li>
+          <li>2 Óleos para Barba 30ml</li>
+        </ul>
+        <a href="https://wa.me/5511999999999?text=Quero%20o%20Kit%20Barbers%20Simple%20R%24149%2C99" target="_blank" rel="noopener" class="btn-comprar">
+          📲 Pedir pelo WhatsApp
+        </a>
+      </article>
+
+      <article class="kit-card" role="listitem">
+        <div class="kit-icon">🎨</div>
+        <span class="kit-tag">Descoloração</span>
+        <h3 class="kit-name">Kit Descoloração Profissional</h3>
+        <p class="kit-desc">Pó descolorante de alta performance com OX incluído. Resultado superior para loiros e mechas.</p>
+        <div class="kit-price-row">
+          <span class="kit-price">R$99,98</span>
+          <span class="kit-old">R$155,99</span>
+          <span class="kit-off">-36%</span>
+        </div>
+        <ul class="kit-items">
+          <li>Pó Descolorante 500g</li>
+          <li>Água Oxigenada 40 Vol 900ml</li>
+        </ul>
+        <a href="https://wa.me/5511999999999?text=Quero%20o%20Kit%20Descoloracao%20R%2499%2C98" target="_blank" rel="noopener" class="btn-comprar">
+          📲 Pedir pelo WhatsApp
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<section id="beneficios" aria-labelledby="benef-title">
+  <div class="container">
+    <p class="section-label">Por que escolher</p>
+    <h2 class="section-title" id="benef-title">Vantagens CapilPro</h2>
+    <div class="benef-grid" role="list">
+      <div class="benef-card" role="listitem">
+        <div class="benef-icon">🚚</div>
+        <h3>Frete Grátis</h3>
+        <p>A partir de R$300 para o Sudeste e R$500 para o Nordeste.</p>
+      </div>
+      <div class="benef-card" role="listitem">
+        <div class="benef-icon">📦</div>
+        <h3>Estoque Garantido</h3>
+        <p>Produtos sempre disponíveis para entrega rápida em todo o Brasil.</p>
+      </div>
+      <div class="benef-card" role="listitem">
+        <div class="benef-icon">🏆</div>
+        <h3>Qualidade Profissional</h3>
+        <p>Linha desenvolvida para barbearias e salões de alto padrão.</p>
+      </div>
+      <div class="benef-card" role="listitem">
+        <div class="benef-icon">📱</div>
+        <h3>Atendimento Ágil</h3>
+        <p>Suporte pelo WhatsApp, com resposta rápida nos dias úteis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cta-box">
+      <h2 id="cta-title">Pronto para fazer<br />seu pedido?</h2>
+      <p>Fale com nossa equipe no WhatsApp. Respondemos rápido e montamos o pedido ideal para o seu negócio.</p>
+      <div class="cta-contacts">
+        <a href="https://wa.me/5511999999999?text=Olá%2C%20quero%20conhecer%20os%20produtos%20da%20CapilPro!" target="_blank" rel="noopener" class="btn-wpp-big">
+          📲 Chamar no WhatsApp
+        </a>
+        <p class="contact-info">
+          Ou envie um e-mail para <a href="mailto:contato@capilpro.com.br">contato@capilpro.com.br</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="footer-logo">Capil<span>Pro</span></a>
+      <p class="footer-desc">Distribuidora premium de produtos capilares para barbearias, salões e revendedores em todo o Brasil. Qualidade profissional com preço de atacado.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+        <a href="#" class="social-btn" aria-label="Facebook">📘</a>
+        <a href="#" class="social-btn" aria-label="TikTok">🎵</a>
+        <a href="https://wa.me/5511999999999" class="social-btn" aria-label="WhatsApp">📱</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="#categorias">Categorias</a></li>
+        <li><a href="#produtos">Produtos</a></li>
+        <li><a href="#kits">Kits Atacado</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Informações</h4>
+      <ul>
+        <li><a href="#">Quem Somos</a></li>
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Trocas e Devoluções</a></li>
+        <li><a href="#">Perguntas Frequentes</a></li>
+        <li><a href="#">Seja um Distribuidor</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li><a href="https://wa.me/5511999999999">📱 (11) 9 9999-9999</a></li>
+        <li><a href="mailto:contato@capilpro.com.br">📧 contato@capilpro.com.br</a></li>
+        <li><a href="#">📍 São Paulo, SP</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 CapilPro Distribuidora. Todos os direitos reservados. <a href="/admin.html" class="admin-link" aria-label="Área administrativa">🔒</a></span>
+    <div class="pay-icons" aria-label="Formas de pagamento">
+      <span class="pay-icon">VISA</span>
+      <span class="pay-icon">MASTER</span>
+      <span class="pay-icon">AMEX</span>
+      <span class="pay-icon">ELO</span>
+      <span class="pay-icon">PIX</span>
+      <span class="pay-icon">BOLETO</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOAT BUTTONS -->
+<a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="wpp-float" aria-label="WhatsApp"><img src="data:image/png;base64,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" alt="WhatsApp" style="width:34px;height:34px;object-fit:contain" /></a>
+
+<!-- CART PANEL -->
+<div class="cart-overlay" id="cartOverlay" role="dialog" aria-label="Carrinho de compras" aria-modal="true">
+  <div class="cart-panel">
+    <div class="cart-panel-head">
+      <h3>🛒 Carrinho</h3>
+      <button class="cart-close-btn" onclick="closeCart()" aria-label="Fechar carrinho">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartItemsList">
+      <p class="cart-empty">Seu carrinho está vazio.</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cartTotal">R$0,00</span>
+      </div>
+      <a id="wppCheckoutBtn" href="#" target="_blank" rel="noopener" class="btn-wpp-big" style="width:100%;justify-content:center;font-size:0.9rem" onclick="registrarPedido()">
+        📲 Finalizar pelo WhatsApp
+      </a>
+    </div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <strong>Adicionado! ✓</strong>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+  /* ── STATE ── */
+  let todosProdutos = [];
+  let filtroAtivo  = 'todos';
+  let marcaAtiva   = 'todos';
+  let cart = [];
+
+  /* ── CARREGAR DA API ── */
+  async function carregarProdutos() {
+    try {
+      const res  = await fetch('/api/produtos');
+      todosProdutos = await res.json();
+    } catch (e) {
+      // fallback offline — array vazio mostra mensagem
+      todosProdutos = [];
+    }
+    atualizarCategorias('todos');
+    renderProdutos();
+  }
+
+  /* ── RENDER PRODUTOS ── */
+  function renderProdutos() {
+    const grid = document.getElementById('prodGrid');
+    let lista = todosProdutos;
+    if (marcaAtiva !== 'todos') lista = lista.filter(p => p.marca === marcaAtiva);
+    if (filtroAtivo !== 'todos') lista = lista.filter(p => p.categoria === filtroAtivo);
+
+    if (!lista.length) {
+      grid.innerHTML = '<p class="prod-loading">Nenhum produto encontrado.</p>';
+      return;
+    }
+
+    // Filtra apenas produtos com imagem — não exibe quadrado cinza/placeholder
+    const listaComFoto = lista.filter(p => p.imagem_url);
+
+    if (!listaComFoto.length) {
+      grid.innerHTML = '<p class="prod-loading">Nenhum produto encontrado.</p>';
+      return;
+    }
+
+    grid.innerHTML = listaComFoto.map(p => `
+      <article class="prod-card" role="listitem">
+        <div class="prod-img">
+          <img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" />
+          ${p.destaque ? '<span class="badge-hot">Top</span>' : ''}
+          ${p.desconto ? `<span class="badge-off">${p.desconto}</span>` : ''}
+        </div>
+        <div class="prod-body">
+          <p class="prod-cat">${p.categoria}</p>
+          <h3 class="prod-name">${p.nome}</h3>
+          <div class="prod-price-row">
+            <span class="prod-price">R$${Number(p.preco).toFixed(2).replace('.',',')}</span>
+            ${p.preco_antigo ? `<span class="prod-old">R$${Number(p.preco_antigo).toFixed(2).replace('.',',')}</span>` : ''}
+          </div>
+          ${p.parcelas ? `<small class="prod-installment">ou ${p.parcelas} sem juros</small>` : ''}
+          <button class="btn-comprar" onclick="addToCart(${p.id})" aria-label="Adicionar ${p.nome} ao carrinho">
+            🛒 Adicionar ao carrinho
+          </button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  /* ── CATEGORIAS DINÂMICAS POR MARCA ── */
+  // Mapeamento de label visível → valor usado no DB
+  const CATEGORIAS = [
+    { label: 'Todos',    value: 'todos'   },
+    { label: 'Pomadas',  value: 'pomada'  },
+    { label: 'Gel',      value: 'gel'     },
+    { label: 'Shaving',  value: 'shaving' },
+    { label: 'Barba',    value: 'barba'   },
+    { label: 'Shampoo',  value: 'shampoo' },
+  ];
+
+  function atualizarCategorias(marca) {
+    // Descobre quais categorias existem para a marca selecionada (com foto)
+    const listaMarca = marca === 'todos'
+      ? todosProdutos
+      : todosProdutos.filter(p => p.marca === marca);
+    const comFoto = listaMarca.filter(p => p.imagem_url);
+    const catsExistentes = new Set(comFoto.map(p => p.categoria));
+
+    const row = document.getElementById('filterTabsRow');
+    row.innerHTML = CATEGORIAS
+      .filter(c => c.value === 'todos' || catsExistentes.has(c.value))
+      .map((c, i) => {
+        const ativo = i === 0;
+        return `<button class="filter-tab${ativo ? ' active' : ''}" onclick="setFilter('${c.value}')" aria-pressed="${ativo}">${c.label}</button>`;
+      }).join('');
+  }
+
+  /* ── BRAND FILTER ── */
+  function setBrand(marca) {
+    marcaAtiva = marca;
+    filtroAtivo = 'todos'; // reset categoria ao trocar marca
+    document.querySelectorAll('.brand-tab').forEach(btn => {
+      const active = btn.dataset.marca === marca;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    atualizarCategorias(marca);
+    renderProdutos();
+  }
+
+  /* ── CATEGORY FILTER ── */
+  function setFilter(cat) {
+    filtroAtivo = cat;
+    document.querySelectorAll('.filter-tab').forEach(btn => {
+      const txt = btn.textContent.trim().toLowerCase();
+      const active = txt === cat || (cat === 'todos' && txt === 'todos');
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', String(active));
+    });
+    renderProdutos();
+  }
+
+  /* ── CART ── */
+  function addToCart(id) {
+    const prod = todosProdutos.find(p => p.id === id);
+    const existing = cart.find(i => i.id === id);
+    if (existing) { existing.qty++; }
+    else { cart.push({ ...prod, qty: 1 }); }
+    updateCartUI();
+    showToast(prod.nome);
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCartUI();
+    renderCartItems();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) { removeFromCart(id); return; }
+    updateCartUI();
+    renderCartItems();
+  }
+
+  function updateCartUI() {
+    const total = cart.reduce((acc, i) => acc + i.preco * i.qty, 0);
+    const count = cart.reduce((acc, i) => acc + i.qty, 0);
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('cartTotal').textContent = 'R$' + total.toFixed(2).replace('.', ',');
+    const footer = document.getElementById('cartFooter');
+    footer.style.display = cart.length ? 'block' : 'none';
+
+    // Monta mensagem WhatsApp
+    const msg = cart.map(i => `${i.qty}x ${i.nome} — R$${(i.preco * i.qty).toFixed(2).replace('.',',')}`).join('%0A');
+    const totalMsg = total.toFixed(2).replace('.', ',');
+    document.getElementById('wppCheckoutBtn').href =
+      `https://wa.me/5511999999999?text=Olá!%20Quero%20fazer%20o%20seguinte%20pedido:%0A%0A${msg}%0A%0A*Total:%20R$${totalMsg}*`;
+  }
+
+  // Grava o pedido no painel administrativo antes de abrir o WhatsApp.
+  // "Fire and forget": não trava o clique nem impede a navegação caso
+  // o backend (Neon) ainda não esteja configurado.
+  function registrarPedido() {
+    if (!cart.length) return;
+    const total = cart.reduce((acc, i) => acc + i.preco * i.qty, 0);
+    const itens = cart.map(i => ({ nome: i.nome, preco: i.preco, qty: i.qty }));
+    fetch('/api/pedidos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itens, total }),
+    }).catch(() => { /* silencioso: não bloqueia o checkout */ });
+  }
+
+  function renderCartItems() {
+    const list = document.getElementById('cartItemsList');
+    if (!cart.length) { list.innerHTML = '<p class="cart-empty">Seu carrinho está vazio.</p>'; return; }
+    list.innerHTML = cart.map(i => `
+      <div class="cart-item">
+        <span class="cart-item-icon">${i.emoji || '💈'}</span>
+        <div class="cart-item-info">
+          <p class="cart-item-name">${i.nome}</p>
+          <p class="cart-item-price">R$${(i.preco * i.qty).toFixed(2).replace('.',',')}</p>
+        </div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${i.id},-1)" aria-label="Remover um">−</button>
+          <span class="qty-val">${i.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i.id},1)" aria-label="Adicionar um">+</button>
+        </div>
+        <button class="cart-rm-btn" onclick="removeFromCart(${i.id})" aria-label="Remover ${i.nome}">🗑</button>
+      </div>
+    `).join('');
+  }
+
+  function openCart(e) {
+    if (e) e.preventDefault();
+    renderCartItems();
+    updateCartUI();
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCart() {
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Fecha ao clicar fora do painel
+  document.getElementById('cartOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeCart();
+  });
+
+  /* ── TOAST ── */
+  let toastTimer;
+  function showToast(nome) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = nome;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  /* ── INIT ── */
+  carregarProdutos();
+</script>
+</body>
+</html>
