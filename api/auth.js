@@ -6,6 +6,11 @@ const EMAIL    = process.env.ADMIN_EMAIL;
 const PASSWORD = process.env.ADMIN_PASSWORD;
 const EXPIRA   = 12 * 60 * 60 * 1000; // 12h
 
+const USUARIOS = [
+  { email: EMAIL, password: PASSWORD },
+  { email: 'Alvinosanches@outlook.com', password: 'Miguel@56' },
+];
+
 function gerarToken(email) {
   const payload = JSON.stringify({ email, exp: Date.now() + EXPIRA });
   const b64 = Buffer.from(payload).toString('base64url');
@@ -50,7 +55,8 @@ export default function handler(req, res) {
     return res.status(500).json({ error: 'Variáveis de ambiente não configuradas.' });
   }
 
-  if (email !== EMAIL || password !== PASSWORD) {
+  const usuario = USUARIOS.find(u => u.email === email && u.password === password);
+  if (!usuario) {
     return res.status(401).json({ error: 'E-mail ou senha incorretos.' });
   }
 
