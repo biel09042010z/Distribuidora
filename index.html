@@ -942,24 +942,31 @@
     /* ── BRAND TABS ── */
     .brand-tabs {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       margin-bottom: 1.5rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
     }
+    .brand-tabs::-webkit-scrollbar { display: none; }
     .brand-tab {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.4rem;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
       border-radius: 999px;
       border: 2px solid var(--border);
       background: var(--card);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       transition: .2s;
       color: var(--ink);
       letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .brand-tab:hover { border-color: var(--gold); }
     .brand-tab.active[data-marca="todos"]  { background: var(--ink); color: #fff; border-color: var(--ink); }
@@ -1149,7 +1156,7 @@
     <!-- BRAND TABS -->
     <div class="brand-tabs" role="group" aria-label="Filtrar por marca">
       <button class="brand-tab active" data-marca="todos" onclick="setBrand('todos')" aria-pressed="true">
-        <span class="brand-dot"></span> Todas as Marcas
+        <span class="brand-dot"></span> Todos
       </button>
       <button class="brand-tab" data-marca="classe-a" onclick="setBrand('classe-a')" aria-pressed="false">
         <span class="brand-dot"></span> Classe A
