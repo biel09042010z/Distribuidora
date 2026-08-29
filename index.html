@@ -1645,11 +1645,33 @@
     if (!cart.length) return;
     const total = cart.reduce((acc, i) => acc + i.preco * i.qty, 0);
     const itens = cart.map(i => ({ nome: i.nome, preco: i.preco, qty: i.qty }));
+
+    // Grava o pedido
     fetch('/api/pedidos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ itens, total }),
-    }).catch(() => { /* silencioso: não bloqueia o checkout */ });
+    }).catch(() => { /* silencioso */ });
+
+    // Desconta estoque de cada item
+    const descontos = cart.map(i => ({ id: i.id, qty: i.qty }));
+    fetch('/api/descontar-estoque', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itens: descontos }),
+    }).then(async res => {
+      if (res.ok) {
+        // Atualiza estoque local dos produtos no cache
+        const data = await res.json().catch(() => ({}));
+        if (data.atualizados) {
+          data.atualizados.forEach(({ id, estoque }) => {
+            const idx = todosProdutos.findIndex(p => p.id === id);
+            if (idx !== -1) todosProdutos[idx].estoque = estoque;
+          });
+          renderProdutos();
+        }
+      }
+    }).catch(() => { /* silencioso */ });
   }
 
   function renderCartItems() {
