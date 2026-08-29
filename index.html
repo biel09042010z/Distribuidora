@@ -854,6 +854,14 @@
       padding: 0.75rem;
     }
     .cart-item-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .cart-item-img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
     .cart-item-info { flex: 1; min-width: 0; }
     .cart-item-name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .cart-item-price { font-size: 0.78rem; color: var(--gold); }
@@ -903,6 +911,31 @@
       font-size: 0.95rem;
     }
     .cart-total span:last-child { color: var(--gold); font-family: 'Poppins', sans-serif; }
+
+    .cart-payment { margin-bottom: 1rem; }
+    .cart-payment-label { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--ink); }
+    .cart-payment-options { display: flex; gap: 0.75rem; }
+    .payment-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink);
+      transition: border-color .2s, background .2s;
+    }
+    .payment-option:has(input:checked) {
+      border-color: var(--gold);
+      background: rgba(194,121,10,0.07);
+      color: var(--gold-dk);
+    }
+    .payment-option input[type="radio"] { display: none; }
 
     /* ── TOAST ── */
     .toast {
@@ -1278,6 +1311,11 @@
     <h2 class="section-title" id="benef-title">Vantagens Invictus</h2>
     <div class="benef-grid" role="list">
       <div class="benef-card" role="listitem">
+        <div class="benef-icon">🚚</div>
+        <h3>Frete Grátis</h3>
+        <p>A partir de R$1.000 para o Sul do Piauí.</p>
+      </div>
+      <div class="benef-card" role="listitem">
         <div class="benef-icon">📦</div>
         <h3>Estoque Garantido</h3>
         <p>Produtos sempre disponíveis para entrega rápida em todo o Brasil.</p>
@@ -1382,6 +1420,19 @@
       <div class="cart-total">
         <span>Total</span>
         <span id="cartTotal">R$0,00</span>
+      </div>
+      <div class="cart-payment">
+        <p class="cart-payment-label">💳 Forma de pagamento</p>
+        <div class="cart-payment-options">
+          <label class="payment-option">
+            <input type="radio" name="pagamento" value="Pix" checked />
+            <span>Pix</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="pagamento" value="Cartão de Crédito" />
+            <span>Cartão de Crédito</span>
+          </label>
+        </div>
       </div>
       <a id="wppCheckoutBtn" href="#" target="_blank" rel="noopener" class="btn-wpp-big" style="width:100%;justify-content:center;font-size:0.9rem" onclick="registrarPedido()">
         📲 Finalizar pelo WhatsApp
@@ -1548,8 +1599,10 @@
     // Monta mensagem WhatsApp
     const msg = cart.map(i => `${i.qty}x ${i.nome} — R$${(i.preco * i.qty).toFixed(2).replace('.',',')}`).join('%0A');
     const totalMsg = total.toFixed(2).replace('.', ',');
+    const pagamentoSelecionado = document.querySelector('input[name="pagamento"]:checked');
+    const pagamento = pagamentoSelecionado ? pagamentoSelecionado.value : 'Pix';
     document.getElementById('wppCheckoutBtn').href =
-      `https://wa.me/5589981225667?text=Olá!%20Quero%20fazer%20o%20seguinte%20pedido:%0A%0A${msg}%0A%0A*Total:%20R$${totalMsg}*`;
+      `https://wa.me/5589981225667?text=Olá!%20Quero%20fazer%20o%20seguinte%20pedido:%0A%0A${msg}%0A%0A*Total:%20R$${totalMsg}*%0A*Pagamento:%20${encodeURIComponent(pagamento)}*`;
   }
 
   // Grava o pedido no painel administrativo antes de abrir o WhatsApp.
@@ -1571,7 +1624,9 @@
     if (!cart.length) { list.innerHTML = '<p class="cart-empty">Seu carrinho está vazio.</p>'; return; }
     list.innerHTML = cart.map(i => `
       <div class="cart-item">
-        <span class="cart-item-icon">${i.emoji || '💈'}</span>
+        ${i.imagem_url
+          ? `<img class="cart-item-img" src="${i.imagem_url}" alt="${i.nome}" />`
+          : `<span class="cart-item-icon">${i.emoji || '💈'}</span>`}
         <div class="cart-item-info">
           <p class="cart-item-name">${i.nome}</p>
           <p class="cart-item-price">R$${(i.preco * i.qty).toFixed(2).replace('.',',')}</p>
