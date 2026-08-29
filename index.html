@@ -517,6 +517,35 @@
       letter-spacing: 0.02em;
     }
     .btn-comprar:hover { background: var(--gold); transform: scale(1.01); }
+    .btn-comprar:disabled,
+    .btn-comprar.indisponivel {
+      background: #d8d6d1;
+      color: #8a8880;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .badge-indisponivel {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .badge-indisponivel span {
+      background: var(--ink);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .prod-card.sem-estoque .prod-img { position: relative; }
+    .prod-card.sem-estoque .prod-name,
+    .prod-card.sem-estoque .prod-price-row { opacity: 0.55; }
 
     /* ── KITS / ATACADO ── */
     #kits { background: var(--surface); }
@@ -1487,12 +1516,15 @@
       return;
     }
 
-    grid.innerHTML = listaComFoto.map(p => `
-      <article class="prod-card" role="listitem">
+    grid.innerHTML = listaComFoto.map(p => {
+      const semEstoque = Number(p.estoque) <= 0;
+      return `
+      <article class="prod-card${semEstoque ? ' sem-estoque' : ''}" role="listitem">
         <div class="prod-img">
           <img src="${p.imagem_url}" alt="${p.nome}" loading="lazy" />
-          ${p.destaque ? '<span class="badge-hot">Top</span>' : ''}
-          ${p.desconto ? `<span class="badge-off">${p.desconto}</span>` : ''}
+          ${semEstoque ? '<div class="badge-indisponivel"><span>Indisponível</span></div>' : ''}
+          ${!semEstoque && p.destaque ? '<span class="badge-hot">Top</span>' : ''}
+          ${!semEstoque && p.desconto ? `<span class="badge-off">${p.desconto}</span>` : ''}
         </div>
         <div class="prod-body">
           <p class="prod-cat">${p.categoria}</p>
@@ -1502,12 +1534,13 @@
             ${p.preco_antigo ? `<span class="prod-old">R$${Number(p.preco_antigo).toFixed(2).replace('.',',')}</span>` : ''}
           </div>
           ${p.parcelas ? `<small class="prod-installment">ou ${p.parcelas} sem juros</small>` : ''}
-          <button class="btn-comprar" onclick="addToCart(${p.id})" aria-label="Adicionar ${p.nome} ao carrinho">
-            🛒 Adicionar ao carrinho
+          <button class="btn-comprar${semEstoque ? ' indisponivel' : ''}" ${semEstoque ? 'disabled' : ''} onclick="addToCart(${p.id})" aria-label="Adicionar ${p.nome} ao carrinho">
+            ${semEstoque ? '❌ Indisponível' : '🛒 Adicionar ao carrinho'}
           </button>
         </div>
       </article>
-    `).join('');
+    `;
+    }).join('');
   }
 
   /* ── CATEGORIAS DINÂMICAS POR MARCA ── */
