@@ -1463,9 +1463,9 @@
           </label>
         </div>
       </div>
-      <a id="wppCheckoutBtn" href="#" target="_blank" rel="noopener" class="btn-wpp-big" style="width:100%;justify-content:center;font-size:0.9rem" onclick="registrarPedido()">
+      <button id="wppCheckoutBtn" class="btn-wpp-big" style="width:100%;justify-content:center;font-size:0.9rem;border:none;cursor:pointer;" onclick="registrarPedido()">
         📲 Finalizar pelo WhatsApp
-      </a>
+      </button>
       <button onclick="closeCart()" style="width:100%;margin-top:0.6rem;padding:0.7rem;background:none;border:1.5px solid var(--border);border-radius:var(--radius);color:var(--muted);font-size:0.82rem;font-weight:600;cursor:pointer;letter-spacing:0.03em;transition:border-color .2s,color .2s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
         ← Continuar comprando
       </button>
@@ -1655,7 +1655,19 @@
     if (!cart.length) return;
     const total = cart.reduce((acc, i) => acc + i.preco * i.qty, 0);
     const itens = cart.map(i => ({ nome: i.nome, preco: i.preco, qty: i.qty }));
-    // Limpa carrinho após confirmar pedido
+
+    // Monta e abre WhatsApp ANTES de limpar o carrinho
+    const msg = itens.map(i => i.qty + 'x ' + i.nome + ' — R$' + (i.preco * i.qty).toFixed(2).replace('.',',')).join('%0A');
+    const totalMsg = total.toFixed(2).replace('.', ',');
+    const pagamentoSelecionado = document.querySelector('input[name="pagamento"]:checked');
+    const pagamento = pagamentoSelecionado ? pagamentoSelecionado.value : 'Pix';
+    const wppUrl = 'https://wa.me/5589981393433?text=Ol%C3%A1!%20Quero%20fazer%20o%20seguinte%20pedido:%0A%0A' + msg + '%0A%0A*Total:%20R$' + totalMsg + '*%0A*Pagamento:%20' + encodeURIComponent(pagamento) + '*';
+    window.open(wppUrl, '_blank');
+
+    // Snapshot antes de limpar
+    const descontos = itens.map(i => ({ id: i.id, qty: i.qty }));
+
+    // Limpa carrinho
     cart = [];
     saveCart();
     updateCartUI();
@@ -1668,7 +1680,6 @@
     }).catch(() => { /* silencioso */ });
 
     // Desconta estoque de cada item
-    const descontos = cart.map(i => ({ id: i.id, qty: i.qty }));
     fetch('/api/descontar-estoque', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
