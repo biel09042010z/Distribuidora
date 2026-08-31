@@ -1481,7 +1481,7 @@
   let todosProdutos = [];
   let filtroAtivo  = 'todos';
   let marcaAtiva   = 'todos';
-  let cart = [];
+  let cart = JSON.parse(localStorage.getItem('capilpro_cart') || '[]');
 
   /* ── CARREGAR DA API ── */
   async function carregarProdutos() {
@@ -1597,17 +1597,23 @@
   }
 
   /* ── CART ── */
+  function saveCart() {
+    localStorage.setItem('capilpro_cart', JSON.stringify(cart));
+  }
+
   function addToCart(id) {
     const prod = todosProdutos.find(p => p.id === id);
     const existing = cart.find(i => i.id === id);
     if (existing) { existing.qty++; }
     else { cart.push({ ...prod, qty: 1 }); }
+    saveCart();
     updateCartUI();
     showToast(prod.nome);
   }
 
   function removeFromCart(id) {
     cart = cart.filter(i => i.id !== id);
+    saveCart();
     updateCartUI();
     renderCartItems();
   }
@@ -1617,6 +1623,7 @@
     if (!item) return;
     item.qty += delta;
     if (item.qty <= 0) { removeFromCart(id); return; }
+    saveCart();
     updateCartUI();
     renderCartItems();
   }
@@ -1645,6 +1652,10 @@
     if (!cart.length) return;
     const total = cart.reduce((acc, i) => acc + i.preco * i.qty, 0);
     const itens = cart.map(i => ({ nome: i.nome, preco: i.preco, qty: i.qty }));
+    // Limpa carrinho após confirmar pedido
+    cart = [];
+    saveCart();
+    updateCartUI();
 
     // Grava o pedido
     fetch('/api/pedidos', {
